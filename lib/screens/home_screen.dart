@@ -81,6 +81,21 @@ class _HomeScreenState extends State<HomeScreen> {
     return response.success;
   }
 
+  // Logout function
+  Future<void> logout(BuildContext context) async {
+  final currentUser = await ParseUser.currentUser();
+  if (currentUser != null) {
+    await currentUser.logout();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Successfully logged out'),
+        backgroundColor: Colors.green,
+      ),
+    );
+    Navigator.pushReplacementNamed(context, '/login'); // Navigate to the login screen
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,6 +105,13 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.blueAccent,
         elevation: 5,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(bottom: Radius.circular(25))),
+        actions: [
+          // Logout button in the AppBar
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () => logout(context),
+          ),
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(
